@@ -395,8 +395,8 @@ const submitContactForm = async () => {
 
   try {
     // Send to your Laravel backend
-    const response = await fetch('http://localhost:8000/api/contact', {
-      method: 'POST',
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+const response = await fetch(`${API_BASE_URL}/contact`, {      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

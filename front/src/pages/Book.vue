@@ -522,7 +522,7 @@ const checkTimeSlotAvailability = async () => {
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
     
     // Primero, verificar si el horario ya está ocupado
-    const checkResponse = await fetch(`${API_URL}/check-availability`, {
+const checkResponse = await fetch(`${API_BASE_URL}/reservas`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -587,8 +587,8 @@ const submitBooking = async () => {
   try {
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
     
-    const response = await fetch(`${API_URL}/reservas`, {
-      method: 'POST',
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+const response = await fetch(`${API_BASE_URL}/reservas`, {      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
