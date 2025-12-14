@@ -44,9 +44,7 @@
     <!-- Main Content -->
     <div class="container mx-auto px-4 py-8">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Left Column: Search Form -->
         <div class="lg:col-span-2">
-          <!-- Quick Search Form -->
           <div class="bg-white rounded-xl shadow-lg p-6 mb-8 border-2 border-[#FDCFFA]">
             <div class="flex items-center mb-6">
               <span class="bg-[#FDCFFA] text-[#4E56C0] text-xs font-semibold px-3 py-1 rounded mr-3">LOWEST PRICE</span>
@@ -793,8 +791,7 @@ const checkAvailabilityForDates = async () => {
   try {
     const API_URL = import.meta.env.VITE_API_URL || '/api'
     // Verificar disponibilidad para la fecha de drop-off
-    const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
-    const dropOffResponse = await fetch(`${API_BASE_URL}/check-availability?date=${searchData.dropOffDate}`, {
+    const dropOffResponse = await fetch(`${API_URL}/check-availability?date=${searchData.dropOffDate}`, {
       headers: {
         'Accept': 'application/json',
       },
@@ -840,12 +837,11 @@ const checkPickupAvailability = async () => {
     const API_URL = import.meta.env.VITE_API_URL || 'api'
 
     // Verificar disponibilidad para la fecha de pick-up
-    const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
-const pickUpResponse = await fetch(`${API_BASE_URL}/reservas/check-availability?date=${searchData.pickUpDate}`, {
-  headers: {
-    'Accept': 'application/json',
-  },
-});
+    const pickUpResponse = await fetch(`${API_URL}/check-availability?date=${searchData.pickUpDate}`, {
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
 
     if (pickUpResponse.ok) {
       const result = await pickUpResponse.json()
@@ -877,7 +873,6 @@ const pickUpResponse = await fetch(`${API_BASE_URL}/reservas/check-availability?
   }
 }
 
-// Computed properties para verificar disponibilidad
 const isDropOffTimeAvailable = computed(() => {
   return availableDropOffTimes.value.includes(searchData.dropOffTime)
 })
@@ -886,7 +881,6 @@ const isPickUpTimeAvailable = computed(() => {
   return availablePickUpTimes.value.includes(searchData.pickUpTime)
 })
 
-// Watch for date changes
 watch(() => searchData.dropOffDate, (newDate) => {
   if (newDate) {
     checkAvailabilityForDates()
@@ -899,7 +893,6 @@ watch(() => searchData.pickUpDate, (newDate) => {
   }
 })
 
-// Calculate parking duration in days
 const parkingDuration = computed(() => {
   if (!searchData.dropOffDate || !searchData.pickUpDate) {
     return 0
@@ -910,22 +903,18 @@ const parkingDuration = computed(() => {
 
   const diffTime = Math.abs(pickUp - dropOff)
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  return Math.max(1, Math.min(diffDays, 30)) // Max 30 days for calculation
+  return Math.max(1, Math.min(diffDays, 30))
 })
 
-// Calculate daily rate based on duration
 const dailyRate = computed(() => {
   const days = parkingDuration.value
   if (days <= 0) return 0
 
-  // For 8+ days, use £14.99 rate
   if (days >= 8) return PRICING_TIERS[8]
 
-  // For 1-7 days, use tiered pricing
   return PRICING_TIERS[days] || PRICING_TIERS[8]
 })
 
-// Calculate competitor price for comparison
 const competitorPrice = computed(() => {
   const days = parkingDuration.value
   if (days <= 0) return 0
@@ -934,26 +923,22 @@ const competitorPrice = computed(() => {
   return COMPETITOR_PRICES[days] * days
 })
 
-// Calculate our price
 const calculatedPrice = computed(() => {
   if (parkingDuration.value === 0) return 0
   return parkingDuration.value * dailyRate.value
 })
 
-// Calculate savings
 const savings = computed(() => {
   if (competitorPrice.value === 0 || calculatedPrice.value === 0) return 0
   return competitorPrice.value - calculatedPrice.value
 })
 
 const calculatePrice = () => {
-  // Basic validation
   if (!searchData.dropOffDate || !searchData.dropOffTime ||
     !searchData.pickUpDate || !searchData.pickUpTime || !searchData.terminal) {
     return
   }
 
-  // Validate that pickup is after dropoff
   const dropOff = new Date(searchData.dropOffDate)
   const pickUp = new Date(searchData.pickUpDate)
 
@@ -963,12 +948,6 @@ const calculatePrice = () => {
     return
   }
 
-  // REMOVER esta validación si quieres permitir la misma hora
-  // if (searchData.dropOffDate === searchData.pickUpDate && searchData.dropOffTime === searchData.pickUpTime) {
-  //   alert('Drop-off and return times cannot be the same. Our staff needs time between appointments.')
-  //   searchData.pickUpTime = ''
-  //   return
-  // }
 }
 
 const proceedToBooking = () => {
@@ -992,13 +971,7 @@ const proceedToBooking = () => {
     return
   }
 
-  // REMOVER esta validación si quieres permitir la misma hora
-  // if (searchData.dropOffDate === searchData.pickUpDate && searchData.dropOffTime === searchData.pickUpTime) {
-  //   alert('Drop-off and return times cannot be the same. Please select different times.')
-  //   return
-  // }
 
-  // Redirect to booking page with all parameters
   router.push({
     path: '/book',
     query: {
@@ -1022,7 +995,6 @@ const scrollToForm = () => {
   }
 }
 
-/// Initialize all fields as empty
 onMounted(() => {
   // Todos los campos vacíos - el usuario debe seleccionar todo
   searchData.dropOffDate = ''

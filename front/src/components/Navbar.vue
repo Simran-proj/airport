@@ -60,7 +60,6 @@
         </button>
       </div>
 
-      <!-- Mobile Menu (VERSION REDUCIDA) -->
       <div v-if="menuOpen" class="fixed inset-0 z-50 md:hidden" @click="closeMenu">
         <!-- Fondo Blur -->
         <div class="absolute inset-0 bg-black bg-opacity-20 backdrop-blur-sm"></div>
@@ -85,7 +84,7 @@
             </button>
           </div>
 
-          <!-- SOLO PÁGINAS -->
+          <!-- PÁGINAS -->
           <ul class="space-y-2">
             <li>
               <router-link @click="closeMenu" to="/"
@@ -158,7 +157,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Animación suave para el popup */
 .fixed .absolute.right-0 {
   animation: slideIn 0.3s ease-out;
 }
@@ -173,7 +171,6 @@ onUnmounted(() => {
   }
 }
 
-/* Scrollbar personalizado */
 .h-\[calc\(100\%-80px\)\]::-webkit-scrollbar {
   width: 4px;
 }
